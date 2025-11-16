@@ -1,0 +1,32 @@
+name: PR Environment Workflow
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  choose-env:
+    runs-on: ubuntu-latest
+    outputs:
+      env_target: ${{ steps.set-env.outputs.env_target }}
+    steps:
+      - name: Set environment based on PR target branch
+        id: set-env
+        run: |
+          if [ "${{ github.event.pull_request.base.ref }}" == "dev" ]; then
+            echo "env_target=dev" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.pull_request.base.ref }}" == "main" ]; then
+            echo "env_target=prod" >> $GITHUB_OUTPUT
+          else
+            echo "env_target=unknown" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    needs: choose-env
+    runs-on: ubuntu-latest
+    if: needs.choose-env.outputs.env_target != 'unknown'
+    steps:
+      - name: Deploy to ${{ needs.choose-env.outputs.env_target }} environment
+        run: echo "Deploying to ${{ needs.choose-env.outputs.env_target }} environment"
