@@ -1,0 +1,23 @@
+name: Dump GitHub Context
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dump_context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        run: |
+          echo 'github: ${{ toJSON(github) }}'
+          echo 'env: ${{ toJSON(env) }}'
+          echo 'job: ${{ toJSON(job) }}'
+
+      - name: Dummy step to populate steps context
+        id: dummy
+        run: echo "This is a dummy step"
+
+      - name: Dump steps context
+        run: echo 'steps: ${{ toJSON(steps) }}'
