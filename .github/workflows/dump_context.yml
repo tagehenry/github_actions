@@ -11,13 +11,13 @@ jobs:
     steps:
       - name: Dump GitHub context
         run: |
-          echo 'github: ${{ toJSON(github) }}'
-          echo 'env: ${{ toJSON(env) }}'
-          echo 'job: ${{ toJSON(job) }}'
+          echo "github: ${{ toJSON(github) }}"
+          echo "env: ${{ toJSON(env) }}"
+          echo "job: ${{ toJSON(job) }}"
 
       - name: Dummy step to populate steps context
         id: dummy
         run: echo "This is a dummy step"
 
       - name: Dump steps context
-        run: echo 'steps: ${{ toJSON(steps) }}'
+        run: echo "steps: ${{ toJSON(steps) }}"
